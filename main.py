@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import datetime as dt
 from bancoDados import *
+from tkinter import messagebox
 
 co0 = "#f0f3f5"  # Preta
 co1 = "#feffff"  # branca
@@ -17,7 +18,7 @@ co9 = "#e9edf5"  # sky blue
 janela = Tk()
 
 janela.title('BENEFÍCIOS')
-janela.geometry('1137x453')
+janela.geometry('1417x453')
 janela.configure(background=co9)
 janela.resizable(width=FALSE, height=FALSE)
 
@@ -30,36 +31,58 @@ def inserir():
     data = e_data.get()
     operacao = combo_operacao.get()
     processo = e_processo.get()
+    observacao = e_observacao.get()
 
-    lista = [nome, beneficio, data, operacao, processo]
+    lista = [nome, beneficio, data, operacao, processo,observacao]
 
     inserir_info(lista)  # insere o cadastro no banco de dados
 
     tree.insert("", 'end', values=lista)  # insere o cadastro no treeview
 
 def suspender():
+    global data_atual
     global tree
     a = tree.focus()
-    b = tree.item(a,
-                  "values")  # b será uma tupla, só que queremos mudar somente a operacao. A tupla não pode ser mudada então teremos que converter para lista
-    c = list(b)  # a lista pode ser mudada e nós vamos mudar o ultimo elemento para Suspensão
-    c.insert(3, 'Suspensão')  # inserindo Suspensão na posição 3
-    c.pop()  # exluindo a ultima posição
-    inserir_info(c)  # insere o focus no banco de dados
-    tree.insert("", 'end', values=c)  # insere a mudança em uma nova arvore  no treeview
-    print(c)
+    b = tree.item(a,"values")
+    c = list(b)
+    c.insert(3, 'Suspensão')
+    c.pop(4)
+    c.insert(2,data_atual)
+    c.pop(3)
+    inserir_info(c)
+    tree.insert("", 'end', values=c)
+    print(f'EU SOU A DATA ATUAL: {data_atual}')
     # AINDA TENHO QUE TROCAR A DATA PARA A DATA EM QUE FOI REALIZADA A SUSPENSÃO
+    # PARA ISSO É PRECISO USAR A BIBLIOTECA DATETIME
 
 
 def excluir():
     global tree
     a = tree.focus()  # coloca o elemento da árvore treeviw focado na variável a. São vários os elementos mas queremos só os valores
     b = tree.item(a, "values")  # extrai somente os values (aquilo que é visível no treeview)
-    tree.delete(a)  # exlui o elemento selecionado da árvore. No entanto temos que exluir do banco de dados
+    d= messagebox.askquestion("EXCLUSAO", "TEM CERTEZA QUE DESEJA EXCLUIR?")
+    if d == "yes":
+        tree.delete(a)  # exlui o elemento selecionado da árvore. No entanto temos que exluir do banco de dados
+        c = [b[0], b[3]]
+        exluir_info(c)  # irá excluir do banco de dados o item selecionado do treeview
 
-    c = [b[0], b[3]]
+    else:
+        messagebox.showinfo("iNFORMAÇÃO","Exclusão não realizada")
 
-    exluir_info(c)  # irá excluir do banco de dados o item selecionado do treeview
+def atualizar():
+    global tree
+    a = tree.focus()
+    b = tree.item(a, "values")
+
+    e_nome.insert('end',b[0])
+    combo_beneficio.insert('end',b[1])
+    e_data.insert('end',b[2])
+    combo_operacao.insert('end',b[3])
+    e_processo.insert('end',b[4])
+    e_observacao.insert('end',b[5])
+
+    print(b)
+    print(b[0])
 
 
 ################### Dividindo a janela principal ######################
@@ -84,40 +107,45 @@ l_nome = Label(frame_baixo, text='Nome*', anchor=NW, font=('Helvetica', '12'), b
 l_nome.place(x=10, y=10)
 
 e_nome = Entry(frame_baixo, width=40, relief=SOLID)
-e_nome.place(x=10, y=40)
+e_nome.place(x=10, y=30)
 
 l_beneficio = Label(frame_baixo, text='Beneficio*', anchor=NW, font=('Helvetica', '12'), bg=co1)
-l_beneficio.place(x=10, y=90)
+l_beneficio.place(x=10, y=70)
 
 b_list = ["Auxílio transporte", "Pre Escolar", "Natalidade", "AGU transporte"]
 b_list.sort()
 combo_beneficio = ttk.Combobox(frame_baixo, values=b_list)
-combo_beneficio.place(x=10, y=120)
+combo_beneficio.place(x=10, y=90)
 
 l_data = Label(frame_baixo, text='Data*', anchor=NW, font=('Helvetica', '12'), bg=co1)
-l_data.place(x=10, y=170)
+l_data.place(x=10, y=130)
 
 ## Definindo o valor padrão do entry data ##
-
+global data_atual
 dataPadrao = StringVar()
 now = dt.datetime.now()
-b = now.strftime("%d/%m/%y")
-dataPadrao.set(b)
+data_atual = now.strftime("%d/%m/%y")
+dataPadrao.set(data_atual)
 e_data = Entry(frame_baixo, width=12, relief=SOLID, textvariable=dataPadrao)
-e_data.place(x=10, y=200)
+e_data.place(x=10, y=150)
 
 l_operacao = Label(frame_baixo, text='Operacao*', anchor=NW, font=('Helvetica', '12'), bg=co1)
-l_operacao.place(x=150, y=170)
+l_operacao.place(x=150, y=130)
 
 vlist = ["Exclusão", "Suspensão", "Inclusão", "Atualização"]
 vlist.sort()
 combo_operacao = ttk.Combobox(frame_baixo, values=vlist)
-combo_operacao.place(x=150, y=200)
+combo_operacao.place(x=150, y=150)
 
 l_processo = Label(frame_baixo, text='Processo*', anchor=NW, font=('Helvetica', '12'), bg=co1)
-l_processo.place(x=10, y=240)
+l_processo.place(x=10, y=180)
 e_processo = Entry(frame_baixo, width=40, relief=SOLID)
-e_processo.place(x=10, y=270)
+e_processo.place(x=10, y=200)
+
+l_observacao = Label(frame_baixo, text='Observação', anchor=NW, font=('Helvetica', '12'), bg=co1)
+l_observacao.place(x=10, y=240)
+e_observacao = Entry(frame_baixo, width=40, relief=SOLID)
+e_observacao.place(x=10, y=260)
 
 
 #######BOTOÕES###########
@@ -135,7 +163,7 @@ b_suspender = Button(frame_baixo, text='Suspender', command=suspender,  font=('H
 b_suspender.place(x=127, y=340)
 
 ## Botao atualizar##
-b_atualizar = Button(frame_baixo, text='Atualizar', font=('Helvetica', '12'), bg=co6, fg=co1)
+b_atualizar = Button(frame_baixo, text='Atualizar', command=atualizar, font=('Helvetica', '12'), bg=co6, fg=co1)
 b_atualizar.place(x=220, y=340)
 
 
@@ -145,7 +173,7 @@ def mostrar():
     global tree
     df_list = mostrar_info()  # pega a tabela que está no banco de dados e coloca na variável df_list
 
-    head = ["Nome", "Beneficio","Data", "Operacao", "Processo"]
+    head = ["Nome", "Beneficio","Data", "Operacao", "Processo", 'Observacao']
     tree = ttk.Treeview(frame_direita, columns=head, height=20, show='headings')
 
     tree.heading('#0', text='vazio')
@@ -154,12 +182,14 @@ def mostrar():
     tree.heading('Data', text='Data')
     tree.heading('Operacao', text="Operacao")
     tree.heading('Processo', text="Processo")
+    tree.heading('Observacao', text="Observacao")
 
     tree.column("Nome", width=280)
+    tree.column("Beneficio", width=160)
     tree.column("Data", width=100)
     tree.column("Operacao", width=110)
-    tree.column("Beneficio", width=160)
     tree.column("Processo", width=150)
+    tree.column('Observacao', width=280)
 
     vsb = ttk.Scrollbar(frame_direita, orient='vertical', command=tree.yview)
     hsb = ttk.Scrollbar(frame_direita, orient='horizontal', command=tree.xview)
