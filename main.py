@@ -3,6 +3,7 @@ from tkinter import ttk
 import datetime as dt
 from bancoDados import *
 from tkinter import messagebox
+from topjanela import pesquisa
 
 co0 = "#f0f3f5"  # Preta
 co1 = "#feffff"  # branca
@@ -18,11 +19,12 @@ co9 = "#e9edf5"  # sky blue
 janela = Tk()
 
 janela.title('BENEFÍCIOS')
-janela.geometry('1417x453')
-janela.configure(background=co9)
-janela.resizable(width=FALSE, height=FALSE)
+#janela.geometry('1417x453')
+#janela.configure(background=co9)
+#janela.resizable(width=FALSE, height=FALSE)
 
 
+################### Criando funções para os botões ######################
 def inserir():
     global tree
 
@@ -84,6 +86,9 @@ def atualizar():
     print(b)
     print(b[0])
 
+################### Criando outraa janela principal ######################
+def pesquisar():
+    pesquisa()
 
 ################### Dividindo a janela principal ######################
 
@@ -149,6 +154,10 @@ e_observacao.place(x=10, y=260)
 
 
 #######BOTOÕES###########
+
+##Botão pesquisar##
+b_pesquisar = Button(frame_baixo, text='Pesquisar', command=pesquisar, font=('Helvetica', '12'), bg=co6, fg=co1)
+b_pesquisar.place(x=120, y=300)
 
 ## Botao incluir ##
 b_inserir = Button(frame_baixo, text='Incluir', command=inserir, font=('Helvetica', '12'), bg=co6, fg=co1)

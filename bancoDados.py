@@ -22,7 +22,6 @@ def mostrar_info():
         cur = conn.cursor()
         query = '''SELECT * FROM dadosCadastrais'''
         lista = cur.execute(query).fetchall()
-        print(lista)
     return lista
 
 # atualizando tabela
