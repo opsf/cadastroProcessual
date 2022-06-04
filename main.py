@@ -17,6 +17,7 @@ co8 = "#263238"  # + verde
 co9 = "#e9edf5"  # sky blue
 
 janela = Tk()
+janela.state("zoomed")
 
 janela.title('BENEFÍCIOS')
 #janela.geometry('1417x453')
@@ -53,9 +54,7 @@ def suspender():
     c.pop(3)
     inserir_info(c)
     tree.insert("", 'end', values=c)
-    print(f'EU SOU A DATA ATUAL: {data_atual}')
-    # AINDA TENHO QUE TROCAR A DATA PARA A DATA EM QUE FOI REALIZADA A SUSPENSÃO
-    # PARA ISSO É PRECISO USAR A BIBLIOTECA DATETIME
+
 
 
 def excluir():
@@ -83,8 +82,18 @@ def atualizar():
     e_processo.insert('end',b[4])
     e_observacao.insert('end',b[5])
 
-    print(b)
-    print(b[0])
+def limpar():
+    global data_atual
+    e_nome.delete(0,"end")
+    combo_beneficio.delete(0,'end')
+    e_data.delete(0,'end')
+    e_data.insert(0,data_atual)
+    combo_operacao.delete(0,'end')
+    e_processo.delete(0,'end')
+    e_observacao.delete(0, 'end')
+
+
+
 
 ################### Criando outraa janela principal ######################
 def pesquisar():
@@ -158,7 +167,11 @@ e_observacao.place(x=10, y=260)
 
 ##Botão pesquisar##
 b_pesquisar = Button(frame_baixo, text='Pesquisar', command=pesquisar, font=('Helvetica', '12'), bg=co6, fg=co1)
-b_pesquisar.place(x=120, y=300)
+b_pesquisar.place(x=50, y=300)
+
+##Botão limpar entry##
+b_limpar = Button(frame_baixo, text='Limpar campos', command=limpar, font=('Helvetica', '12'), bg=co6, fg=co1)
+b_limpar.place(x=150, y=300)
 
 ## Botao incluir ##
 b_inserir = Button(frame_baixo, text='Incluir', command=inserir, font=('Helvetica', '12'), bg=co6, fg=co1)
