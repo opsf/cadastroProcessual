@@ -19,6 +19,22 @@ def pesquisa():
 
     top = Tk()
 
+    ###################### retornando dados da pesquisa ########################
+
+    def pesquisar():
+        global tree
+
+        lista = mostrar_info()  # mostra uma lista de tuplas cadastradas no banco de dados
+        print(lista)
+        nome = e_p_nome.get()
+        print(nome)
+        for indice, tupla in enumerate(lista):
+            if tupla[0] == nome:
+                tree.insert("", 'end', values=tupla)
+
+
+
+
     ################### Dividindo a janela top ######################
 
     frame_top_cima = Frame(top, width=1000, height=100, background=co1, relief='flat')
@@ -66,13 +82,12 @@ def pesquisa():
     #######BOTOÕES###########
 
     ##Botão pesquisar##
-    b_p_pesquisar = Button(frame_top_cima, text='Pesquisar', font=('Helvetica', '12'), bg=co6, fg=co1)
+    b_p_pesquisar = Button(frame_top_cima, text='Pesquisar', command=pesquisar, font=('Helvetica', '12'), bg=co6, fg=co1)
     b_p_pesquisar.place(x=450, y=60)
 
     ###################### Configurando frame-top_baixo ########################
 
-
-    df_list = mostrar_info()  # pega a tabela que está no banco de dados e coloca na variável df_list
+    global tree
 
     head = ["Nome", "Beneficio", "Data", "Operacao", "Processo", 'Observacao']
     tree = ttk.Treeview(frame_top_baixo, columns=head, height=20, show='headings')
@@ -95,12 +110,13 @@ def pesquisa():
     vsb = ttk.Scrollbar(frame_top_baixo, orient='vertical', command=tree.yview)
     hsb = ttk.Scrollbar(frame_top_baixo, orient='horizontal', command=tree.xview)
 
-    for i in df_list:
-        tree.insert("", 'end', values=i)
+
 
     tree.grid(column=0, row=0)
     vsb.grid(column=1, row=0)
     hsb.grid(column=0, row=1)
+
+
 
     top.mainloop()
 pesquisa()
