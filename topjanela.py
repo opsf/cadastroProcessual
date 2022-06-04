@@ -25,12 +25,14 @@ def pesquisa():
         global tree
 
         lista = mostrar_info()  # mostra uma lista de tuplas cadastradas no banco de dados
-        print(lista)
         nome = e_p_nome.get()
-        print(nome)
+        beneficio = combo_p_beneficio.get()
         for indice, tupla in enumerate(lista):
             if tupla[0] == nome:
                 tree.insert("", 'end', values=tupla)
+            if tupla[1] == beneficio:
+                tree.insert("", 'end', values=tupla)
+
 
 
 
