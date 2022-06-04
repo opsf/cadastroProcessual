@@ -65,7 +65,7 @@ def excluir():
     d= messagebox.askquestion("EXCLUSAO", "TEM CERTEZA QUE DESEJA EXCLUIR?")
     if d == "yes":
         tree.delete(a)  # exlui o elemento selecionado da árvore. No entanto temos que exluir do banco de dados
-        c = [b[0], b[3]]
+        c = [b[0], b[3]] # no banco de dados são dois argumentos
         exluir_info(c)  # irá excluir do banco de dados o item selecionado do treeview
 
     else:
@@ -89,6 +89,7 @@ def atualizar():
 ################### Criando outraa janela principal ######################
 def pesquisar():
     pesquisa()
+
 
 ################### Dividindo a janela principal ######################
 

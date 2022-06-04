@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from bancoDados import *
+from tkinter import messagebox
 
 
 
@@ -24,14 +25,31 @@ def pesquisa():
     def pesquisar():
         global tree
 
+        # COLOCAR AQUI O CODIGO PARA LIMPEZA DO TREEVIEW - PESQUISAR
+
+
         lista = mostrar_info()  # mostra uma lista de tuplas cadastradas no banco de dados
-        nome = e_p_nome.get()
-        beneficio = combo_p_beneficio.get()
-        for indice, tupla in enumerate(lista):
-            if tupla[0] == nome:
+
+        nome = e_p_nome.get() # pega o valor escrito no campo nome
+        beneficio = combo_p_beneficio.get() # pega o valor selecionado no campo Escolha o beneficio
+        data = e_p_data.get()
+        operacao = combo_operacao.get()
+        processo = e_p_processo.get()
+
+        for tupla in lista:
+
+            if tupla[0] == nome or tupla[1] == beneficio or tupla[2]==data or tupla[3]==operacao or tupla[4]==processo:
                 tree.insert("", 'end', values=tupla)
-            if tupla[1] == beneficio:
-                tree.insert("", 'end', values=tupla)
+
+
+        ######## limpando os campos de entrada da pesquisa##########
+        e_p_nome.delete(0,"end")
+        combo_p_beneficio.delete(0, "end")
+        e_p_data.delete(0, "end")
+        combo_operacao.delete(0, "end")
+        e_p_processo.delete(0, "end")
+
+
 
 
 
@@ -121,4 +139,5 @@ def pesquisa():
 
 
     top.mainloop()
+
 pesquisa()
