@@ -27,60 +27,74 @@ janela.title('BENEFÍCIOS')
 
 ################### Criando funções para os botões ######################
 def inserir():
-    global tree
+    try:
+        global tree
 
-    nome = e_nome.get()
-    beneficio = combo_beneficio.get()
-    data = e_data.get()
-    operacao = combo_operacao.get()
-    processo = e_processo.get()
-    observacao = e_observacao.get()
+        nome = e_nome.get()
+        beneficio = combo_beneficio.get()
+        data = e_data.get()
+        operacao = combo_operacao.get()
+        processo = e_processo.get()
+        observacao = e_observacao.get()
 
-    lista = [nome, beneficio, data, operacao, processo,observacao]
+        lista = [nome, beneficio, data, operacao, processo,observacao]
 
-    inserir_info(lista)  # insere o cadastro no banco de dados
+        inserir_info(lista)  # insere o cadastro no banco de dados
 
-    tree.insert("", 'end', values=lista)  # insere o cadastro no treeview
+        tree.insert("", 'end', values=lista)  # insere o cadastro no treeview
+    except:
+        messagebox.showerror("ERRO","SELECIONE UM ELEMENTO")
 
 def suspender():
-    global data_atual
-    global tree
-    a = tree.focus()
-    b = tree.item(a,"values")
-    c = list(b)
-    c.insert(3, 'Suspensão')
-    c.pop(4)
-    c.insert(2,data_atual)
-    c.pop(3)
-    inserir_info(c)
-    tree.insert("", 'end', values=c)
-
+    try:
+        global data_atual
+        global tree
+        a = tree.focus()
+        b = tree.item(a,"values")
+        c = list(b)
+        c.insert(3, 'Suspensão')
+        c.pop(4)
+        c.insert(2,data_atual)
+        c.pop(3)
+        inserir_info(c)
+        tree.insert("", 'end', values=c)
+    except:
+        messagebox.showerror("ERRO", "SELECIONE UM ELEMENTO")
 
 
 def excluir():
-    global tree
-    a = tree.focus()  # coloca o elemento da árvore treeviw focado na variável a. São vários os elementos mas queremos só os valores
-    b = tree.item(a, "values")  # extrai somente os values (aquilo que é visível no treeview)
-    d= messagebox.askquestion("EXCLUSAO", "TEM CERTEZA QUE DESEJA EXCLUIR?")
-    if d == "yes":
-        tree.delete(a)  # exlui o elemento selecionado da árvore. No entanto temos que exluir do banco de dados
-        c = [b[0], b[3]] # no banco de dados são dois argumentos
-        exluir_info(c)  # irá excluir do banco de dados o item selecionado do treeview
 
-    else:
-        messagebox.showinfo("iNFORMAÇÃO","Exclusão não realizada")
+    try:
+        global tree
+        a = tree.focus()  # coloca o elemento da árvore treeviw focado na variável a. São vários os elementos mas queremos só os valores
+        b = tree.item(a, "values")  # extrai somente os values (aquilo que é visível no treeview)
+        d= messagebox.askquestion("EXCLUSAO", "TEM CERTEZA QUE DESEJA EXCLUIR?")
+        if d == "yes":
+            tree.delete(a)  # exlui o elemento selecionado da árvore. No entanto temos que exluir do banco de dados
+            c = [b[0], b[3]] # no banco de dados são dois argumentos
+            exluir_info(c)  # irá excluir do banco de dados o item selecionado do treeview
+
+        else:
+            messagebox.showinfo("iNFORMAÇÃO","Exclusão não realizada")
+    except:
+        messagebox.showerror("ERRO", "SELECIONE UM ELEMENTO")
 
 def atualizar():
-    global tree
-    a = tree.focus()
-    b = tree.item(a, "values")
 
-    e_nome.insert('end',b[0])
-    combo_beneficio.insert('end',b[1])
-    e_data.insert('end',b[2])
-    combo_operacao.insert('end',b[3])
-    e_processo.insert('end',b[4])
-    e_observacao.insert('end',b[5])
+    try:
+        global tree
+        a = tree.focus()
+        b = tree.item(a, "values")
+
+        e_nome.insert('end',b[0])
+        combo_beneficio.insert('end',b[1])
+        e_data.insert('end',b[2])
+        combo_operacao.insert('end',b[3])
+        e_processo.insert('end',b[4])
+        e_observacao.insert('end',b[5])
+    except:
+        messagebox.showerror("ERRO", "SELECIONE UM ELEMENTO")
+
 
 def limpar():
     global data_atual
